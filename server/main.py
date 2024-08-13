@@ -60,6 +60,34 @@ async def get_history(conversation_id: int, session: Session = Depends(get_sessi
     chat_history = results.all()
     return chat_history
 
+# Define a DELETE endpoint to delete a specific chat message
+@app.delete("/conversations/{conversation_id}/chat/{chat_id}")
+async def delete_chat(conversation_id: int, chat_id: int, session: Session = Depends(get_session)): 
+    chat_entry = session.get(Chat, chat_id)
+    if not chat_entry or chat_entry.conversation_id != conversation_id:
+        raise HTTPException(status_code=404, detail="Chat entry not found")
+
+    session.delete(chat_entry)
+    session.commit()
+    
+    return {"message": "Chat entry deleted successfully"}
+
+# Define a PUT endpoint to edit a specific chat message
+@app.put("/conversations/{conversation_id}/chat/{chat_id}")
+async def edit_chat(conversation_id: int, chat_id: int, message: ChatCreate, session: Session = Depends(get_session)):
+    # Fetch the chat entry by id
+    chat_entry = session.get(Chat, chat_id)
+    if not chat_entry or chat_entry.conversation_id != conversation_id:
+        raise HTTPException(status_code=404, detail="Chat entry not found")
+    
+    # Edit the chat entry
+    chat_entry.user = message.user
+    chat_entry.bot = f"Echo: {message.user}"
+    session.add(chat_entry)
+    session.commit()
+
+    return {"message": "Chat entry updated successfully"}
+
 # Get all conversations
 @app.get("/conversations/", response_model=List[ConversationRead])
 async def get_conversations(session: Session = Depends(get_session)):
