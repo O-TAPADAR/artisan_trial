@@ -32,6 +32,34 @@ async def create_conversation(session: Session = Depends(get_session)):
     session.refresh(conversation)
     return conversation
 
+# Define a POST endpoint to add a message to a conversation
+@app.post("/conversations/{conversation_id}/chat", response_model=ChatRead)
+async def chat(conversation_id: int, message: ChatCreate, session: Session = Depends(get_session)):
+    conversation = session.get(Conversation, conversation_id)
+    if not conversation:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    
+    chat_entry = Chat(user=message.user, bot="", conversation_id=conversation_id)
+    session.add(chat_entry)
+    session.commit()
+    session.refresh(chat_entry)
+
+    bot_response = f"Echo: {message.user}"
+    
+    chat_entry.bot = bot_response
+    session.add(chat_entry)
+    session.commit()
+
+    return chat_entry
+
+# Define a GET endpoint to retrieve the chat history 
+@app.get("/conversations/{conversation_id}/history", response_model=List[ChatRead])
+async def get_history(conversation_id: int, session: Session = Depends(get_session)):
+    statement = select(Chat).where(Chat.conversation_id == conversation_id)
+    results = session.exec(statement)
+    chat_history = results.all()
+    return chat_history
+
 # Get all conversations
 @app.get("/conversations/", response_model=List[ConversationRead])
 async def get_conversations(session: Session = Depends(get_session)):
