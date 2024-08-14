@@ -1,38 +1,281 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.container {
   display: flex;
   flex-direction: column;
+  height: 100vh; 
+  margin: 0 auto; 
+  max-width: 800px; 
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding: 20px;
+  background-color: #5a45ff; 
+  color: white; 
+  border-bottom: 2px solid #4a35e0; 
+  border-top-left-radius: 8px; 
+  border-top-right-radius: 8px;
+}
+
+.header img {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin-right: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.header p {
+  margin: 0;
+  color: #e0e0e0; 
+  font-size: 18px;
+}
+.main-content {
+  display: flex;
+  flex: 1;
+}
+
+.conversations-container {
+  flex-basis: 30%;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.conversations-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.conversations-header h2 {
+  margin-right: 10px;
+}
+
+.new-conversation-button {
+  background-color: #5a45ff;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px; 
+  line-height: 20px; 
+  padding: 0;
+}
+
+.conversation-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  background-color: #fff;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.conversation-item.selected {
+  background-color: #f0f0f0;
+}
+
+.conversation-item-icon {
+  margin-right: 10px;
+  background-color: #5a45ff;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.chat-area {
+  flex-basis: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-history {
+  flex: 1; 
+  padding: 15px;
+  background-color: #f9f9f9;
+  overflow-y: auto; 
+  max-height: calc(100vh - 200px); 
+  box-sizing: border-box; 
+}
+
+.message-bubble {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.message-bubble.user {
+  justify-content: flex-end;
+}
+
+.message-bubble.bot {
+  justify-content: flex-start;
+}
+
+.message-avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.message-avatar.user {
+  margin-left: 10px;
+}
+
+.message-avatar.bot {
+  margin-right: 10px;
+}
+
+.message-content {
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 60%;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.message-content.user {
+  background-color: #5a45ff;
+  color: #fff;
+  text-align: right;
+}
+
+.message-content.bot {
+  background-color: #fff;
+  color: #000;
+  text-align: left;
+}
+
+.input-section {
+  padding: 10px;
+  margin: 10px;
+  background-color: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  bottom: 0px;
+}
+
+.input-section input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  margin-right: 10px;
+  outline: none;
+}
+
+.input-section button {
+  padding: 10px 20px;
+  background-color: #5a45ff;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.message-actions {
+  display: none; 
+  margin-left: 10px;
+}
+
+.message-content:hover .message-actions {
+  display: flex;
+  gap: 10px; 
+}
+
+.message-actions button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.message-actions button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.message-actions button.edit {
+  color: #ff5a5a;
+}
+
+.message-actions button.delete {
+  color: #ff5a5a;
+}
+
+.message-actions button.edit:hover {
+  background-color: rgba(90, 69, 255, 0.1);
+}
+
+.message-actions button.delete:hover {
+  background-color: rgba(255, 90, 90, 0.1);
+}
+
+.message-actions i {
+  font-size: 16px;
+}
+
+.message-editing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.message-editing input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.message-editing button {
+  background-color: #5a45ff;
   color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
 }
 
-.App-link {
-  color: #61dafb;
+.message-editing button.cancel {
+  background-color: #ff5a5a;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.message-editing button:hover {
+  background-color: #4a35e0;
+}
+
+.message-editing button.cancel:hover {
+  background-color: #e04a4a;
 }

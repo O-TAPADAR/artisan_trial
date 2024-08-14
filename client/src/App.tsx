@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import botAvatar from './bot_avatar_url.png';
+import userAvatar from './user_avatar_url.png';
+import './App.css';
 
 const App: React.FC = () => {
   const [newMessage, setNewMessage] = useState<string>('');
@@ -78,59 +81,110 @@ const App: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Chat Application</h1>
-
-      <button onClick={handleNewConversation}>Start New Conversation</button>
-
-      <div>
-        <h2>Conversations</h2>
-        <ul>
-          {conversations.map(conversation => (
-            <li key={conversation.id} onClick={() => setSelectedConversation(conversation.id)}>
-              Conversation {conversation.id}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {selectedConversation !== null && (
-        <div>
-          <h2>Chat History</h2>
-          <ul>
-            {chatHistory.map(chat => (
-              <li key={chat.id}>
-                {editingId === chat.id ? (
-                  <div>
-                    <input
-                      type="text"
-                      value={editingText}
-                      onChange={(e) => setEditingText(e.target.value)}
-                    />
-                    <button onClick={() => handleEditMessage(chat.id)}>Save</button>
-                    <button onClick={cancelEditing}>Cancel</button>
-                  </div>
-                ) : (
-                  <div>
-                    <strong>User:</strong> {chat.user} <br />
-                    <strong>Bot:</strong> {chat.bot} <br />
-                    <button onClick={() => startEditing(chat.id, chat.user)}>Edit</button>
-                    <button onClick={() => handleDeleteMessage(chat.id)}>Delete</button>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type your message"
-          />
-          <button onClick={handleSendMessage}>Send</button>
+    <div className="container">
+        {/* Header */}
+        <div className="header">
+            <img src={botAvatar} alt="Bot Avatar" />
+            <div>
+                <h2>Hey👋, I'm Ava</h2>
+                <p>Ask me anything or pick a place to start</p>
+            </div>
         </div>
-      )}
+
+        {/* Main Content */}
+        <div className="main-content">
+            <div className="conversations-container">
+                <div className="conversations-header">
+                    <h2>Conversations</h2>
+                    <button className="new-conversation-button" onClick={handleNewConversation}>+</button>
+                </div>
+                <div>
+                    {conversations.map((conv) => (
+                        <div
+                            key={conv.id}
+                            onClick={() => setSelectedConversation(conv.id)}
+                            className={`conversation-item ${selectedConversation === conv.id ? 'selected' : ''}`}>
+                            <div className="conversation-item-icon">
+                                {conv.id}
+                            </div>
+                            <span>Conversation {conv.id}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="chat-area">
+                <div className="chat-history">
+                    {chatHistory.map((entry) => (
+                        <React.Fragment key={entry.id}>
+
+                            {/* User Message Bubble */}
+                            {entry.user && (
+                                <div className="message-bubble user">
+                                    <img src={userAvatar} alt="User Avatar" className="message-avatar user" />
+                                    <div className="message-content user">
+                                        {editingId === entry.id ? (
+                                            <div className="message-editing">
+                                                <input
+                                                    type="text"
+                                                    value={editingText}
+                                                    onChange={(e) => setEditingText(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                      if (e.key === 'Enter') {
+                                                        handleEditMessage(entry.id);
+                                                      }
+                                                  }}
+                                                    style={{ width: '80%', padding: '5px' }}
+                                                />
+                                                <button onClick={() => handleEditMessage(entry.id)} >Save</button>
+                                                <button className="cancel" onClick={cancelEditing}>Cancel</button>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <p style={{ margin: 0 }}>{entry.user}</p>
+                                                <div className="message-actions">
+                                                    <button className="edit" onClick={() => startEditing(entry.id, entry.user)}>
+                                                        <i className="fas fa-edit"></i>
+                                                    </button>
+                                                    <button className="delete" onClick={() => handleDeleteMessage(entry.id)}>
+                                                        <i className="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Bot Message Bubble */}
+                            {entry.bot && (
+                                <div className="message-bubble bot">
+                                    <img src={botAvatar} alt="Bot Avatar" className="message-avatar bot" />
+                                    <div className="message-content bot">
+                                        <p style={{ margin: 0 }}>{entry.bot}</p>
+                                    </div>
+                                </div>
+                            )}
+                        </React.Fragment>
+                    ))}
+                </div>
+
+                {selectedConversation !== null && (
+                    <div className="input-section">
+                        <input type="text"
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  handleSendMessage();
+                                }
+                            }}
+                            placeholder="Your question"/>
+                        <button onClick={handleSendMessage}>Send</button>
+                    </div>
+                  )}
+            </div>
+        </div>
     </div>
   );
 };
