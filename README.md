@@ -12,10 +12,11 @@ This project is a chat application with a frontend built using React and TypeScr
 
 ## Features
 
-- Start new conversations and chat in real-time.
-- Add, edit, and delete chat messages.
-- View chat history.
-- Automated tests using `pytest`.
+1. **Real-time Chat:** Engage in seamless, real-time conversations (echo-ing bot).
+2. **Inline Edit/Delete:** Edit or delete messages with options appearing on hover.
+3. **Add Conversations:** Allows for multiple conversations at the same.
+4. **Modern Tech Stack:** Built with React, TypeScript, and FastAPI.
+5. **Automated Testing:** Ensures reliability with pytest.
 
 ## Installation
 
@@ -25,7 +26,7 @@ This project is a chat application with a frontend built using React and TypeScr
 
    ```bash
    git clone https://github.com/O-TAPADAR/artisan_trial.git
-   cd artisan_trial
+   cd artisan_trial/server
 
 2. Set up a Python virtual environment:
 
